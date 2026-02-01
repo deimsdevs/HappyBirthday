@@ -3,198 +3,436 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Birthday Cheryl!</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+    <title>Happy Birthday, Cheryl!</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         :root {
-            --neon-green: #39ff14;
-            --neon-gold: #ffdf00;
-            --neon-pink: #ff007f;
-            --glass: rgba(0, 0, 0, 0.75);
+            --gold: #FFD700;
+            --blue: #4A90E2;
+            --red: #E74C3C;
+            --dark: #0a0a0a;
+            --glass-bg: rgba(15, 15, 25, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
         }
 
-        body, html { 
-            margin: 0; padding: 0; height: 100%; width: 100%;
-            overflow: hidden; background: #000; font-family: 'Poppins', sans-serif; 
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            background: var(--dark);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
         }
 
-        /* --- BACKGROUND PHOTO --- */
-        .world-container {
+        body::before {
+            content: '';
             position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: -2;
-            background: url('images/parrot.jpg') no-repeat center center;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('images/background.jpg');
             background-size: cover;
-            filter: brightness(0.5);
+            background-position: center center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            z-index: -1;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            transform: translateZ(0);
+            filter: none;
         }
 
-        .stage {
-            height: 100vh;
+        .container {
+            min-height: 100vh;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            padding: 20px;
+            justify-content: center;
+            padding: clamp(1rem, 5vw, 3rem);
+            position: relative;
         }
 
-        .glass-card {
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 30px;
-            padding: 40px;
+        /* Flying Letters Animation */
+        .title-container {
+            perspective: 1000px;
+            margin-bottom: clamp(2rem, 8vh, 4rem);
+            position: relative;
+        }
+
+        .title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 8vw, 5rem);
+            font-weight: 900;
             text-align: center;
-            max-width: 550px;
-            width: 90%;
-            box-shadow: 0 0 40px rgba(0,0,0,0.9);
+            letter-spacing: 0.05em;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: clamp(0.3rem, 1vw, 0.8rem);
+            filter: drop-shadow(0 0 30px var(--gold)) 
+                    drop-shadow(0 0 60px var(--blue))
+                    drop-shadow(0 0 90px var(--red));
         }
 
-        h1 {
-            font-family: 'Montserrat', sans-serif;
-            font-size: clamp(2rem, 8vw, 3.2rem);
-            background: linear-gradient(to bottom, #fff, var(--neon-gold));
+        .letter {
+            display: inline-block;
+            opacity: 0;
+            animation: flyIn 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        @keyframes flyIn {
+            0% {
+                opacity: 0;
+                transform: translate(var(--tx), var(--ty)) rotate(var(--rotate)) scale(0);
+            }
+            70% {
+                transform: translate(0, 0) rotate(0) scale(1.1);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(0, 0) rotate(0) scale(1);
+            }
+        }
+
+        /* Typewriter Section */
+        .typewriter-container {
+            max-width: 900px;
+            width: 100%;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: clamp(2rem, 6vw, 4rem);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.4),
+                0 0 60px rgba(255, 215, 0, 0.15),
+                0 0 100px rgba(74, 144, 226, 0.1),
+                0 0 140px rgba(231, 76, 60, 0.1),
+                inset 0 0 60px rgba(255, 255, 255, 0.03);
+            opacity: 0;
+            animation: fadeIn 1s ease-out 2s forwards;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .typewriter-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.1) 0%, transparent 70%);
+            animation: ambient 8s ease-in-out infinite;
+        }
+
+        @keyframes ambient {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(20px, 20px); }
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        .typewriter-text {
+            font-size: clamp(1.1rem, 3vw, 1.5rem);
+            line-height: 1.8;
+            color: transparent;
+            background: linear-gradient(135deg, #FFD700, #FFA500, #FF6B6B, #4A90E2);
+            background-clip: text;
             -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 15px;
+            font-weight: 600;
+            position: relative;
+            z-index: 1;
         }
 
-        #typewriter { font-size: 1.1rem; line-height: 1.7; color: #f0f0f0; min-height: 120px; }
+        .typewriter-text::after {
+            content: '|';
+            animation: blink 0.7s step-end infinite;
+            margin-left: 2px;
+        }
 
-        .btn-reveal {
+        .typewriter-text.finished::after {
             display: none;
-            margin-top: 25px;
-            padding: 18px 45px;
-            background: var(--neon-green);
-            color: #000;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        /* Reveal Button */
+        .reveal-button {
+            opacity: 0;
+            margin-top: clamp(2rem, 5vh, 3rem);
+            padding: clamp(1rem, 3vw, 1.5rem) clamp(2.5rem, 6vw, 4rem);
+            font-size: clamp(1rem, 2.5vw, 1.3rem);
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--gold), #FFA500);
             border: none;
             border-radius: 50px;
-            font-weight: 800;
+            color: var(--dark);
             cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 
+                0 10px 40px rgba(255, 215, 0, 0.4),
+                0 0 60px rgba(255, 215, 0, 0.3),
+                inset 0 -2px 10px rgba(0, 0, 0, 0.2);
             text-transform: uppercase;
-            letter-spacing: 2px;
-            box-shadow: 0 0 20px var(--neon-green);
-        }
-
-        /* --- SURPRISE OVERLAY --- */
-        #surprise-overlay {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: radial-gradient(circle, rgba(20,20,20,0.8) 0%, #000 100%);
-            display: none;
-            z-index: 100;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .photo-frame {
+            letter-spacing: 0.15em;
             position: relative;
-            width: 90%;
-            max-width: 450px;
-            height: 65vh;
-            border: 5px solid var(--neon-gold);
-            border-radius: 20px;
             overflow: hidden;
-            background: #111;
-            z-index: 105;
-            box-shadow: 0 0 60px var(--neon-gold);
         }
 
-        .cheryl-img {
-            width: 100%; height: 100%;
-            object-fit: contain; 
-        }
-
-        .glow-orb {
+        .reveal-button::before {
+            content: '';
             position: absolute;
-            width: 200px; height: 200px;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
             border-radius: 50%;
-            filter: blur(60px);
-            opacity: 0.5;
-            z-index: 101;
-            animation: pulse 4s infinite alternate;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
         }
 
-        @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.4); } }
+        .reveal-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
 
-        h2#reveal-text {
-            color: #fff;
-            font-family: 'Montserrat';
-            font-size: 1.6rem;
+        .reveal-button:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 
+                0 15px 60px rgba(255, 215, 0, 0.6),
+                0 0 80px rgba(255, 215, 0, 0.5);
+        }
+
+        .reveal-button:active {
+            transform: translateY(-2px) scale(1.02);
+        }
+
+        .reveal-button.show {
+            animation: buttonFadeIn 1s ease-out forwards;
+        }
+
+        @keyframes buttonFadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Hidden Surprise Section */
+        .surprise-section {
+            display: none;
+            opacity: 0;
+            margin-top: clamp(2rem, 6vh, 4rem);
             text-align: center;
-            margin-top: 25px;
-            text-shadow: 0 0 10px var(--neon-gold);
-            z-index: 110;
+        }
+
+        .surprise-section.revealed {
+            display: block;
+            animation: revealFadeIn 1.5s ease-out forwards;
+        }
+
+        @keyframes revealFadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        .image-frame {
+            width: clamp(300px, 80vw, 650px);
+            height: clamp(300px, 80vw, 650px);
+            margin: 0 auto;
+            border-radius: 50%;
+            overflow: hidden;
+            position: relative;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            padding: 15px;
+            box-shadow: 
+                0 0 0 3px rgba(255, 215, 0, 0.3),
+                0 0 0 6px rgba(255, 215, 0, 0.2),
+                0 0 60px rgba(255, 215, 0, 0.6),
+                0 0 100px rgba(255, 215, 0, 0.4),
+                0 0 140px rgba(255, 165, 0, 0.3),
+                inset 0 0 60px rgba(255, 215, 0, 0.1);
+            animation: glow 3s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% {
+                box-shadow: 
+                    0 0 0 3px rgba(255, 215, 0, 0.3),
+                    0 0 0 6px rgba(255, 215, 0, 0.2),
+                    0 0 60px rgba(255, 215, 0, 0.6),
+                    0 0 100px rgba(255, 215, 0, 0.4),
+                    0 0 140px rgba(255, 165, 0, 0.3),
+                    inset 0 0 60px rgba(255, 215, 0, 0.1);
+            }
+            50% {
+                box-shadow: 
+                    0 0 0 3px rgba(255, 215, 0, 0.5),
+                    0 0 0 6px rgba(255, 215, 0, 0.4),
+                    0 0 80px rgba(255, 215, 0, 0.8),
+                    0 0 120px rgba(255, 215, 0, 0.6),
+                    0 0 160px rgba(255, 165, 0, 0.5),
+                    inset 0 0 80px rgba(255, 215, 0, 0.2);
+            }
+        }
+
+        .image-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center;
+            border-radius: 50%;
+            display: block;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .title {
+                gap: clamp(0.2rem, 0.5vw, 0.4rem);
+            }
+            
+            .typewriter-container {
+                padding: clamp(1.5rem, 4vw, 2.5rem);
+            }
         }
     </style>
 </head>
 <body>
-
-    <div class="world-container"></div>
-    
-    <div class="stage">
-        <div class="glass-card" id="main-card">
-            <h1>Happy Birthday Cheryl!</h1>
-            <div id="typewriter"></div>
-            <button class="btn-reveal" id="revealBtn" onclick="startParty()">Reveal Surprise</button>
+    <div class="container">
+        <div class="title-container">
+            <h1 class="title" id="title"></h1>
         </div>
-    </div>
 
-    <div id="surprise-overlay">
-        <div class="glow-orb" style="background: var(--neon-pink); top: 10%; left: 10%;"></div>
-        <div class="glow-orb" style="background: var(--neon-gold); bottom: 10%; right: 10%;"></div>
-        <div class="glow-orb" style="background: var(--neon-green); top: 40%; right: -50px;"></div>
-
-        <div class="photo-frame">
-            <img src="images/concilia.jpg" class="cheryl-img" alt="Cheryl Birthday Photo">
+        <div class="typewriter-container">
+            <p class="typewriter-text" id="typewriter"></p>
         </div>
-        <h2 id="reveal-text">STAY BLESSED, CHERYL! 🎂✨</h2>
+
+        <button class="reveal-button" id="revealBtn">Reveal Surprise</button>
+
+        <div class="surprise-section" id="surprise">
+            <div class="image-frame">
+                <img src="images/concilia.png" alt="Cheryl">
+            </div>
+        </div>
     </div>
 
     <script>
-        const msg = "This is to you Cheryl, may you have the best moments of your day. Since we met you have been a friend that keeps me going, thank you for all that, enjoy your day! You're a true blessing.";
-        let i = 0;
+        // Phase 1: Flying Letters Animation
+        const titleText = "Happy Birthday";
+        const titleElement = document.getElementById('title');
+        const letters = titleText.split('');
 
-        function type() {
-            if (i < msg.length) {
-                document.getElementById("typewriter").innerHTML += msg.charAt(i);
-                i++;
-                setTimeout(type, 45);
+        letters.forEach((letter, index) => {
+            const span = document.createElement('span');
+            span.textContent = letter === ' ' ? '\u00A0' : letter;
+            span.className = 'letter';
+            
+            // Random directions for flying in
+            const directions = [
+                { tx: '-200vw', ty: '-100vh', rotate: '-720deg' },
+                { tx: '200vw', ty: '-100vh', rotate: '720deg' },
+                { tx: '-200vw', ty: '100vh', rotate: '720deg' },
+                { tx: '200vw', ty: '100vh', rotate: '-720deg' },
+                { tx: '0', ty: '-200vh', rotate: '360deg' },
+                { tx: '0', ty: '200vh', rotate: '-360deg' },
+            ];
+            
+            const randomDir = directions[Math.floor(Math.random() * directions.length)];
+            span.style.setProperty('--tx', randomDir.tx);
+            span.style.setProperty('--ty', randomDir.ty);
+            span.style.setProperty('--rotate', randomDir.rotate);
+            span.style.animationDelay = `${index * 0.05}s`;
+            
+            titleElement.appendChild(span);
+        });
+
+        // Phase 2: Typewriter Effect
+        const typewriterText = `Cheryl, today is all about you...
+
+Your laughter, your warmth, your kindness—they make the world brighter...
+
+May this year bring you moments that fill your heart with joy, dreams that come true, and happiness that never ends...
+
+Happy Birthday! 🎂
+
+May your day be filled with laughter, surprises, cake, and all the love you deserve...
+
+Shine on—you're unforgettable!`;
+
+        const typewriterElement = document.getElementById('typewriter');
+        const revealBtn = document.getElementById('revealBtn');
+        let charIndex = 0;
+
+        function typeWriter() {
+            if (charIndex < typewriterText.length) {
+                typewriterElement.textContent = typewriterText.substring(0, charIndex + 1);
+                charIndex++;
+                setTimeout(typeWriter, 50); // Typing speed
             } else {
-                document.getElementById("revealBtn").style.display = 'inline-block';
+                typewriterElement.classList.add('finished');
+                revealBtn.classList.add('show');
             }
         }
 
-        function startParty() {
-            document.getElementById('main-card').style.display = 'none';
-            document.getElementById('surprise-overlay').style.display = 'flex';
+        // Start typewriter after title animation completes
+        setTimeout(() => {
+            typeWriter();
+        }, 2500);
 
-            const duration = 15 * 60 * 1000; 
+        // Phase 3: Reveal Surprise with Confetti
+        revealBtn.addEventListener('click', () => {
+            // Trigger confetti
+            const duration = 5 * 1000;
             const animationEnd = Date.now() + duration;
+            const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+            function randomInRange(min, max) {
+                return Math.random() * (max - min) + min;
+            }
 
             const interval = setInterval(function() {
                 const timeLeft = animationEnd - Date.now();
-                if (timeLeft <= 0) return clearInterval(interval);
 
-                confetti({
-                    particleCount: 40, 
-                    spread: 70,
-                    origin: { x: Math.random() * 0.3, y: Math.random() - 0.2 },
-                    colors: ['#39ff14', '#ffdf00', '#ff007f']
-                });
-                confetti({
-                    particleCount: 40, 
-                    spread: 70,
-                    origin: { x: Math.random() * 0.3 + 0.7, y: Math.random() - 0.2 },
-                    colors: ['#39ff14', '#ffdf00', '#ff007f']
-                });
-            }, 600);
-        }
+                if (timeLeft <= 0) {
+                    return clearInterval(interval);
+                }
 
-        window.onload = type;
+                const particleCount = 50 * (timeLeft / duration);
+
+                confetti(Object.assign({}, defaults, {
+                    particleCount,
+                    origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }
+                }));
+                confetti(Object.assign({}, defaults, {
+                    particleCount,
+                    origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }
+                }));
+            }, 250);
+
+            // Show surprise section
+            document.getElementById('surprise').classList.add('revealed');
+            revealBtn.style.display = 'none';
+        });
     </script>
 </body>
 </html>
