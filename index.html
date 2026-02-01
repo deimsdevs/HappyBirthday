@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Cheryl!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --neon-green: #39ff14;
+            --neon-gold: #ffdf00;
+            --neon-pink: #ff007f;
+            --glass: rgba(0, 0, 0, 0.75);
+        }
+
+        body, html { 
+            margin: 0; padding: 0; height: 100%; width: 100%;
+            overflow: hidden; background: #000; font-family: 'Poppins', sans-serif; 
+        }
+
+        /* --- BACKGROUND PHOTO --- */
+        .world-container {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -2;
+            /* PASTE YOUR BACKGROUND IMAGE LINK BETWEEN THE QUOTES BELOW */
+            background: url('INSERT_YOUR_NATURE_BACKGROUND_LINK_HERE') no-repeat center center;
+            background-size: cover;
+            filter: brightness(0.5);
+        }
+
+        .stage {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 30px;
+            padding: 40px;
+            text-align: center;
+            max-width: 550px;
+            width: 90%;
+            box-shadow: 0 0 40px rgba(0,0,0,0.9);
+        }
+
+        h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: clamp(2rem, 8vw, 3.2rem);
+            background: linear-gradient(to bottom, #fff, var(--neon-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+        }
+
+        #typewriter { font-size: 1.1rem; line-height: 1.7; color: #f0f0f0; min-height: 120px; }
+
+        .btn-reveal {
+            display: none;
+            margin-top: 25px;
+            padding: 18px 45px;
+            background: var(--neon-green);
+            color: #000;
+            border: none;
+            border-radius: 50px;
+            font-weight: 800;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 0 20px var(--neon-green);
+        }
+
+        /* --- SURPRISE OVERLAY --- */
+        #surprise-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: radial-gradient(circle, rgba(20,20,20,0.8) 0%, #000 100%);
+            display: none;
+            z-index: 100;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .photo-frame {
+            position: relative;
+            width: 90%;
+            max-width: 450px;
+            height: 65vh;
+            border: 5px solid var(--neon-gold);
+            border-radius: 20px;
+            overflow: hidden;
+            background: #111;
+            z-index: 105;
+            box-shadow: 0 0 60px var(--neon-gold);
+        }
+
+        .cheryl-img {
+            width: 100%; height: 100%;
+            object-fit: contain; /* Maintains original pixel quality */
+        }
+
+        .glow-orb {
+            position: absolute;
+            width: 200px; height: 200px;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.5;
+            z-index: 101;
+            animation: pulse 4s infinite alternate;
+        }
+
+        @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.4); } }
+
+        h2#reveal-text {
+            color: #fff;
+            font-family: 'Montserrat';
+            font-size: 1.6rem;
+            text-align: center;
+            margin-top: 25px;
+            text-shadow: 0 0 10px var(--neon-gold);
+            z-index: 110;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="world-container"></div>
+    
+    <div class="stage">
+        <div class="glass-card" id="main-card">
+            <h1>Happy Birthday Cheryl!</h1>
+            <div id="typewriter"></div>
+            <button class="btn-reveal" id="revealBtn" onclick="startParty()">Reveal Surprise</button>
+        </div>
+    </div>
+
+    <div id="surprise-overlay">
+        <div class="glow-orb" style="background: var(--neon-pink); top: 10%; left: 10%;"></div>
+        <div class="glow-orb" style="background: var(--neon-gold); bottom: 10%; right: 10%;"></div>
+        <div class="glow-orb" style="background: var(--neon-green); top: 40%; right: -50px;"></div>
+
+        <div class="photo-frame">
+            <img src="INSERT_CHERYL_PHOTO_LINK_HERE" class="cheryl-img" alt="Cheryl Birthday">
+        </div>
+        <h2 id="reveal-text">STAY BLESSED, CHERYL! 🎂✨</h2>
+    </div>
+
+    <script>
+        const msg = "This is to you Cheryl, may you have the best moments of your day. Since we met you have been a friend that keeps me going, thank you for all that, enjoy your day! You're a true blessing.";
+        let i = 0;
+
+        function type() {
+            if (i < msg.length) {
+                document.getElementById("typewriter").innerHTML += msg.charAt(i);
+                i++;
+                setTimeout(type, 45);
+            } else {
+                document.getElementById("revealBtn").style.display = 'inline-block';
+            }
+        }
+
+        function startParty() {
+            document.getElementById('main-card').style.display = 'none';
+            document.getElementById('surprise-overlay').style.display = 'flex';
+
+            const duration = 15 * 60 * 1000; 
+            const animationEnd = Date.now() + duration;
+
+            const interval = setInterval(function() {
+                const timeLeft = animationEnd - Date.now();
+                if (timeLeft <= 0) return clearInterval(interval);
+
+                const particleCount = 50 * (timeLeft / duration);
+                
+                confetti({
+                    particleCount, 
+                    spread: 70,
+                    origin: { x: Math.random() * 0.3, y: Math.random() - 0.2 },
+                    colors: ['#39ff14', '#ffdf00', '#ff007f']
+                });
+                confetti({
+                    particleCount, 
+                    spread: 70,
+                    origin: { x: Math.random() * 0.3 + 0.7, y: Math.random() - 0.2 },
+                    colors: ['#39ff14', '#ffdf00', '#ff007f']
+                });
+            }, 600);
+        }
+
+        window.onload = type;
+    </script>
+</body>
+</html>
